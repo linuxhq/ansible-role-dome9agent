@@ -1,0 +1,19 @@
+---
+dome9_agent_debug: False
+dome9_agent_pair_key: generic_prod.pem
+dome9_agent_pair_cert: generic_prod.pem
+dome9_agent_run_dir: /var/lib/dome9
+dome9_connection_ca_certs: ca-certs.pem
+dome9_connection_cert_enforce: True
+dome9_connection_host: agents.dome9.com
+dome9_connection_port: 443
+dome9_firewall_enable_ftp: True
+dome9_firewall_synflood_protect: False
+dome9_install_pairkey: xxxxxxxxxxxxxxxxxx
+dome9_install_secgroups:
+  - secgroup1
+  - secgroup2
+dome9_poller_ca_certs: ca-certs.pem
+dome9_poller_enabled: True
+dome9_poller_host: notifications.dome9.com
+dome9_poller_port: 443

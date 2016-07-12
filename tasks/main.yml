@@ -1,0 +1,39 @@
+---
+- name: Assert that prerequisites exist
+  tags: dome9agent
+  assert:
+    that:
+      - dome9_install_pairkey is defined
+      - dome9_install_secgroups is defined
+
+- name: Install Dome9Agent package
+  tags: dome9agent
+  yum: name=Dome9Agent
+       enablerepo=Dome9
+       state=present
+       update_cache=yes
+  register: dome9_yum
+
+- name: Execute dome9d pairing
+  tags: dome9agent
+  command: >
+    dome9d pair
+    -g {{ dome9_install_secgroups|join(',') }}
+    -k {{ dome9_install_pairkey }}
+    -s {{ inventory_hostname }}
+  when: dome9_yum|changed
+
+- block:
+    - name: Configure agent.conf
+      template: src=agent.conf.j2
+                dest=/etc/dome9/agent.conf
+                owner=root
+                group=root
+                mode=0644
+      notify: restart dome9d
+    - name: Enable and start the dome9d service
+      service: name=dome9d
+               enabled=yes
+               state=started 
+  tags: dome9agent
+  when: dome9_yum|success
