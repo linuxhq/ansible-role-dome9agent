@@ -1,103 +1,27 @@
 # dome9 configuration agent
 
 [connection]
-{% if dome9_connection_host is defined %}
-host = {{ dome9_connection_host }}
-{% else %}
-host = agents.dome9.com
-{% endif %}
-{% if dome9_connection_port is defined %}
-port = {{ dome9_connection_port }}
-{% else %}
-port = 443
-{% endif %}
-{% if dome9_connection_ca_certs is defined %}
-ca_certs = {{ dome9_connection_ca_certs }}
-{% else %}
-ca_certs = ca-certs.pem
-{% endif %}
-{% if dome9_connection_cert_enforce is defined %}
-{%   if dome9_connection_cert_enforce %}
-cert_enforce = 1
-{%   else %}
-cert_enforce = 0
-{%   endif %}
-{% else %}
-cert_enforce = 1
-{% endif %}
+host = {{ dome9_connection_host if dome9_connection_host is defined else 'agents.dome9.com' }}
+port = {{ dome9_connection_port if dome9_connection_port is defined else '443' }}
+ca_certs = {{ dome9_connection_ca_certs if dome9_connection_ca_certs is defined else 'ca-certs.pem' }}
+cert_enforce = {{ '1' if dome9_connection_cert_enforce is defined and dome9_connection_cert_enforce else '0' }}
 
 [poller]
-{% if dome9_poller_enabled is defined %}
-{%   if dome9_poller_enabled %}
-enabled = 1
-{%   else %}
-enabled = 0
-{%   endif %}
-{% else %}
-enabled = 1
-{% endif %}
-{% if dome9_poller_host is defined %}
-host = {{ dome9_poller_host }}
-{% else %}
-host = notifications.dome9.com
-{% endif %}
-{% if dome9_poller_port is defined %}
-port = {{ dome9_poller_port }}
-{% else %}
-port = 443
-{% endif %}
-{% if dome9_poller_ca_certs is defined %}
-ca_certs = {{ dome9_poller_ca_certs }}
-{% else %}
-ca_certs = ca-certs.pem
-{% endif %}
+enabled = {{ '1' if dome9_poller_enabled is defined and dome9_poller_enabled else '0' }}
+host = {{ dome9_poller_host if dome9_poller_host is defined else 'notifications.dome9.com' }}
+port = {{ dome9_poller_port if dome9_poller_port is defined else '443' }}
+ca_certs = {{ dome9_poller_ca_certs if dome9_poller_ca_certs is defined else 'ca-certs.pem' }}
 
 [firewall]
-{% if dome9_firewall_enable_ftp is defined %}
-{%   if dome9_firewall_enable_ftp %}
-enable_ftp = 1
-{%   else %}
-enable_ftp = 0
-{%   endif %}
-{% else %}
-enable_ftp = 0
-{% endif %}
-{% if dome9_firewall_synflood_protect is defined %}
-{%   if dome9_firewall_synflood_protect %}
-synflood_protect = 1
-{%   else %}
-synflood_protect = 0
-{%   endif %}
-{% else %}
-synflood_protect = 0
-{% endif %}
+enable_ftp = {{ '1' if dome9_firewall_enable_ftp is defined and dome9_firewall_enable_ftp else '0' }}
+synflood_protect = {{ '1' if dome9_firewall_synflood_protect is defined and dome9_firewall_synflood_protect else '0' }}
 
 [agent]
-{% if dome9_agent_pair_key is defined %}
-pair_key = {{ dome9_agent_pair_key }}
-{% else %}
-pair_key = generic_prod.pem
-{% endif %}
-{% if dome9_agent_pair_cert is defined %}
-pair_cert = {{ dome9_agent_pair_cert }}
-{% else %}
-pair_cert = generic_prod.pem
-{% endif %}
+pair_key = {{ dome9_agent_pair_key if dome9_agent_pair_key is defined else 'generic_prod.pem' }}
+pair_cert = {{ dome9_agent_pair_cert if dome9_agent_pair_cert is defined else 'generic_prod.pem' }}
 
 # 1 to set logging to DEBUG level
-{% if dome9_agent_debug is defined %}
-{%   if dome9_agent_debug %}
-debug = 1
-{%   else %}
-debug = 0
-{%   endif %}
-{% else %}
-debug = 0
-{% endif %}
+debug = {{ '1' if dome9_agent_debug is defined and dome9_agent_debug else '0' }}
 
 # where to store key and run state
-{% if dome9_agent_run_dir is defined %}
-run_dir = {{ dome9_agent_run_dir }}
-{% else %}
-run_dir = /var/lib/dome9
-{% endif %}
+run_dir = {{ dome9_agent_run_dir if dome9_agent_run_dir is defined else '/var/lib/dome9' }}
