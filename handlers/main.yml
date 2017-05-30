@@ -1,5 +1,7 @@
 ---
 - name: restart dome9d
-  tags: dome9_agent
-  service: name=dome9d
-           state=restarted
+  tags: dome9agent
+  service:
+    name: dome9d
+    state: restarted
+...

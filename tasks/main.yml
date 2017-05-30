@@ -6,15 +6,16 @@
       - dome9_install_pairkey is defined
       - dome9_install_secgroups is defined
 
-- name: Install Dome9Agent package
+- name: Ensure that the Dome9Agent package is installed
   tags: dome9agent
-  yum: name=Dome9Agent
-       enablerepo=Dome9
-       state=present
-       update_cache=yes
+  yum:
+    enablerepo: Dome9
+    name: Dome9Agent
+    state: present
+    update_cache: yes
   register: dome9_yum
 
-- name: Execute dome9d pairing
+- name: Executing dome9d with pairing settings
   tags: dome9agent
   command: >
     dome9d pair
@@ -24,16 +25,20 @@
   when: dome9_yum|changed
 
 - block:
-    - name: Configure agent.conf
-      template: src=agent.conf.j2
-                dest=/etc/dome9/agent.conf
-                owner=root
-                group=root
-                mode=0644
+    - name: Appying agent.conf configuration
+      template:
+        src: agent.conf.j2
+        dest: /etc/dome9/agent.conf
+        owner: root
+        group: root
+        mode: 0644
       notify: restart dome9d
+
     - name: Enable and start the dome9d service
-      service: name=dome9d
-               enabled=yes
-               state=started 
+      service:
+        enabled: yes
+        name: dome9d
+        state: started
   tags: dome9agent
   when: dome9_yum|success
+...
