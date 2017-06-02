@@ -1,27 +1,27 @@
 # dome9 configuration agent
 
 [connection]
-host = {{ dome9_connection_host if dome9_connection_host is defined else 'agents.dome9.com' }}
-port = {{ dome9_connection_port if dome9_connection_port is defined else '443' }}
-ca_certs = {{ dome9_connection_ca_certs if dome9_connection_ca_certs is defined else 'ca-certs.pem' }}
+host = {{ dome9_connection_host }}
+port = {{ dome9_connection_port }}
+ca_certs = {{ dome9_connection_ca_certs }}
 cert_enforce = {{ '1' if dome9_connection_cert_enforce is defined and dome9_connection_cert_enforce else '0' }}
 
 [poller]
 enabled = {{ '1' if dome9_poller_enabled is defined and dome9_poller_enabled else '0' }}
-host = {{ dome9_poller_host if dome9_poller_host is defined else 'notifications.dome9.com' }}
-port = {{ dome9_poller_port if dome9_poller_port is defined else '443' }}
-ca_certs = {{ dome9_poller_ca_certs if dome9_poller_ca_certs is defined else 'ca-certs.pem' }}
+host = {{ dome9_poller_host }}
+port = {{ dome9_poller_port }}
+ca_certs = {{ dome9_poller_ca_certs }}
 
 [firewall]
-enable_ftp = {{ '1' if dome9_firewall_enable_ftp is defined and dome9_firewall_enable_ftp else '0' }}
+enable_ftp = {{ '0' if dome9_firewall_enable_ftp is defined and not dome9_firewall_enable_ftp else '1' }}
 synflood_protect = {{ '1' if dome9_firewall_synflood_protect is defined and dome9_firewall_synflood_protect else '0' }}
 
 [agent]
-pair_key = {{ dome9_agent_pair_key if dome9_agent_pair_key is defined else 'generic_prod.pem' }}
-pair_cert = {{ dome9_agent_pair_cert if dome9_agent_pair_cert is defined else 'generic_prod.pem' }}
+pair_key = {{ dome9_agent_pair_key }}
+pair_cert = {{ dome9_agent_pair_cert }}
 
 # 1 to set logging to DEBUG level
 debug = {{ '1' if dome9_agent_debug is defined and dome9_agent_debug else '0' }}
 
 # where to store key and run state
-run_dir = {{ dome9_agent_run_dir if dome9_agent_run_dir is defined else '/var/lib/dome9' }}
+run_dir = {{ dome9_agent_run_dir }}
