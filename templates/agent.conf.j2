@@ -4,10 +4,10 @@
 host = {{ dome9_connection_host }}
 port = {{ dome9_connection_port }}
 ca_certs = {{ dome9_connection_ca_certs }}
-cert_enforce = {{ '1' if dome9_connection_cert_enforce is defined and dome9_connection_cert_enforce else '0' }}
+cert_enforce = {{ '0' if dome9_connection_cert_enforce is defined and not dome9_connection_cert_enforce else '1' }}
 
 [poller]
-enabled = {{ '1' if dome9_poller_enabled is defined and dome9_poller_enabled else '0' }}
+enabled = {{ '0' if dome9_poller_enabled is defined and not dome9_poller_enabled else '1' }}
 host = {{ dome9_poller_host }}
 port = {{ dome9_poller_port }}
 ca_certs = {{ dome9_poller_ca_certs }}
