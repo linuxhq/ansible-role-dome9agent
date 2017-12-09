@@ -52,7 +52,7 @@ must be defined so you can access your node.
 
 ## License
 
-BSD
+GPLv3
 
 ## Author Information
 

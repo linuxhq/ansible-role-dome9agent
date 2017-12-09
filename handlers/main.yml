@@ -1,6 +1,7 @@
 ---
 - name: restart dome9d
   tags: dome9agent
+  become: true
   service:
     name: dome9d
     state: restarted
