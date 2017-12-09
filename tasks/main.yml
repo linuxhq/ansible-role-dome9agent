@@ -16,6 +16,13 @@
     update_cache: yes
   register: dome9_yum
 
+- name: Determine if dome9d stamp has been generated
+  tags: dome9agent
+  become: true
+  stat:
+    path: /var/lib/dome9/stamp
+  register: dome9_stat
+
 - name: Executing dome9d with pairing settings
   tags: dome9agent
   become: true
@@ -24,7 +31,9 @@
     -g "{{ dome9_install_secgroups|join(',') }}"
     -k "{{ dome9_install_pairkey }}"
     -s "{{ inventory_hostname }}"
-  when: dome9_yum|changed
+  when:
+    - not dome9_stat.stat.exists
+    - dome9_yum|success
 
 - block:
     - name: Appying agent.conf configuration
@@ -36,11 +45,10 @@
         mode: 0644
       notify: restart dome9d
 
-    - name: Enable and start the dome9d service on boot
+    - name: Enable the dome9d service on boot
       service:
         enabled: yes
         name: dome9d
-        state: started
   tags: dome9agent
   become: true
   when: dome9_yum|success
