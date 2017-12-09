@@ -1,5 +1,5 @@
 ---
-- name: Assert that prerequisites exist
+- name: Assert that the prerequisites are defined
   tags: dome9agent
   assert:
     that:
@@ -13,43 +13,22 @@
     enablerepo: Dome9
     name: Dome9Agent
     state: present
-    update_cache: yes
-  register: dome9_yum
-
-- name: Determine if dome9d stamp has been generated
-  tags: dome9agent
-  become: true
-  stat:
-    path: /var/lib/dome9/stamp
-  register: dome9_stat
-
-- name: Executing dome9d with pairing settings
-  tags: dome9agent
-  become: true
-  command: >
-    dome9d pair
-    -g "{{ dome9_install_secgroups|join(',') }}"
-    -k "{{ dome9_install_pairkey }}"
-    -s "{{ inventory_hostname }}"
-  when:
-    - not dome9_stat.stat.exists
-    - dome9_yum|success
+  register: dome9agent_yum
 
 - block:
-    - name: Appying agent.conf configuration
-      template:
-        src: agent.conf.j2
-        dest: /etc/dome9/agent.conf
-        owner: root
-        group: root
-        mode: 0644
-      notify: restart dome9d
+    - name: Checking for a dome9agent client certificiate
+      stat:
+        path: /var/lib/dome9/client.pem
+      register: dome9agent_stat
 
-    - name: Enable the dome9d service on boot
-      service:
-        enabled: yes
-        name: dome9d
+    - name: Executing dome9agent pairing tasks (if applicable)
+      import_tasks: dome9agent_pairing.yml
+      when: not dome9agent_stat.stat.exists
+
+    - name: Executing dome9agent service tasks (if applicable)
+      import_tasks: dome9agent_service.yml
+      when: dome9agent_stat.stat.exists
   tags: dome9agent
   become: true
-  when: dome9_yum|success
+  when: dome9agent_yum|success
 ...

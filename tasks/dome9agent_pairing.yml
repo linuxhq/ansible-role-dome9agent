@@ -1,0 +1,23 @@
+---
+- name: Appying agent.conf configuration
+  template:
+    src: agent.conf.j2
+    dest: /etc/dome9/agent.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Executing dome9d with pairing settings
+  tags: dome9agent
+  become: true
+  command: >
+    dome9d pair
+    -g "{{ dome9_install_secgroups|join(',') }}"
+    -k "{{ dome9_install_pairkey }}"
+    -s "{{ inventory_hostname }}"
+
+- name: Enable the dome9d service on boot
+  service:
+    enabled: yes
+    name: dome9d
+...

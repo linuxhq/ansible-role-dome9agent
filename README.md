@@ -27,10 +27,9 @@ Available variables are listed below, along with default values:
     dome9_poller_host: notifications.dome9.com
     dome9_poller_port: 443
 
-You must modify these varibles.  The pairkey is used to register your node, and the secgroups
-must be defined so you can access your node.
+The following variables are __**required**__:
 
-    dome9_install_pairkey: ...
+    dome9_install_pairkey: ''
     dome9_install_secgroups: []
 
 ## Dependencies
@@ -44,11 +43,11 @@ must be defined so you can access your node.
         - role: linuxhq.dome9agent
           dome9_firewall_enable_ftp: False
           dome9_firewall_synflood_protect: True
-          dome9_install_pairkey: xxxxxxxxxxxxxxxxxx
+          dome9_install_pairkey: hq92aalptp2c6es2me
           dome9_install_secgroups:
-            - secgroup1
-            - secgroup2
-            - secgroup3
+            - whitelist-dns
+            - whitelist-external
+            - whitelist-internal
 
 ## License
 
