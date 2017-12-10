@@ -20,11 +20,17 @@ Available variables are listed below, along with default values:
     dome9_connection_cert_enforce: True
     dome9_connection_host: agents.dome9.com
     dome9_connection_port: 443
+    dome9_firewall_allow_icmp: False
+    dome9_firewall_allow_ipsec: False
     dome9_firewall_enable_ftp: True
+    dome9_firewall_enforce_outbound: True
     dome9_firewall_synflood_protect: False
+    dome9_install_pairkey: ''
+    dome9_install_secgroups: []
     dome9_poller_ca_certs: ca-certs.pem
     dome9_poller_enabled: True
     dome9_poller_host: notifications.dome9.com
+    dome9_poller_nossl: False
     dome9_poller_port: 443
 
 The following variables are __**required**__:
