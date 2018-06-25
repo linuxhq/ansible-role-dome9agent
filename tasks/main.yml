@@ -1,11 +1,4 @@
 ---
-- name: Assert that the prerequisites are defined
-  tags: dome9agent
-  assert:
-    that:
-      - dome9_install_pairkey is defined
-      - dome9_install_secgroups is defined
-
 - name: Ensure that the Dome9Agent package is installed
   tags: dome9agent
   become: true
@@ -14,21 +7,45 @@
     name: Dome9Agent
     state: present
   register: dome9agent_yum
-
-- block:
-    - name: Checking for a dome9agent client certificiate
-      stat:
-        path: /var/lib/dome9/client.pem
-      register: dome9agent_stat
-
-    - name: Executing dome9agent pairing tasks (if applicable)
-      import_tasks: dome9agent_pairing.yml
-      when: not dome9agent_stat.stat.exists
-
-    - name: Executing dome9agent service tasks (if applicable)
-      import_tasks: dome9agent_service.yml
-      when: dome9agent_stat.stat.exists
+    
+- name: Attempting to overlay dome9agent configurations
   tags: dome9agent
   become: true
-  when: dome9agent_yum|success
+  template:
+    src: agent.conf.j2
+    dest: /etc/dome9/agent.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart dome9d
+  when: dome9agent_yum is success
+
+- name: Checking for a dome9agent client certificiate
+  tags: dome9agent
+  become: true
+  stat:
+    path: /var/lib/dome9/client.pem
+  register: dome9agent_stat
+  when: dome9agent_yum is success
+
+- name: Attempting to execute dome9d with pairing settings
+  tags: dome9agent
+  become: true
+  command: >
+    dome9d pair
+    -g "{{ dome9_install_secgroups|join(',') }}"
+    -k "{{ dome9_install_pairkey }}"
+    -s "{{ inventory_hostname }}"
+  when:
+    - dome9agent_yum is success
+    - not dome9agent_stat.stat.exists
+
+- name: Ensure that dome9d is started and enabled on boot
+  tags: dome9agent
+  become: true
+  service:
+    enabled: yes
+    name: dome9d
+    state: started
+  when: dome9agent_yum is success
 ...

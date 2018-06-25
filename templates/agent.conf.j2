@@ -1,27 +1,27 @@
 # {{ ansible_managed }}
 
 [agent]
-debug = {{ '1' if dome9_agent_debug is defined and dome9_agent_debug else '0' }}
+debug = {{ '1' if dome9_agent_debug|bool else '0' }}
 pair_key = {{ dome9_agent_pair_key }}
 pair_cert = {{ dome9_agent_pair_cert }}
 run_dir = {{ dome9_agent_run_dir }}
 
 [connection]
 ca_certs = {{ dome9_connection_ca_certs }}
-cert_enforce = {{ '1' if dome9_connection_cert_enforce is defined and dome9_connection_cert_enforce else '0' }}
+cert_enforce = {{ '1' if dome9_connection_cert_enforce|bool else '0' }}
 host = {{ dome9_connection_host }}
 port = {{ dome9_connection_port }}
 
 [firewall]
-allow_icmp = {{ '1' if dome9_firewall_allow_icmp is defined and dome9_firewall_allow_icmp else '0' }}
-allow_ipsec = {{ '1' if dome9_firewall_allow_ipsec is defined and dome9_firewall_allow_ipsec else '0' }}
-enable_ftp = {{ '1' if dome9_firewall_enable_ftp is defined and dome9_firewall_enable_ftp else '0' }}
-enforce_outbound = {{ '1' if dome9_firewall_enforce_outbound is defined and dome9_firewall_enforce_outbound else '0' }}
-synflood_protect = {{ '1' if dome9_firewall_synflood_protect is defined and dome9_firewall_synflood_protect else '0' }}
+allow_icmp = {{ '1' if dome9_firewall_allow_icmp|bool else '0' }}
+allow_ipsec = {{ '1' if dome9_firewall_allow_ipsec|bool else '0' }}
+enable_ftp = {{ '1' if dome9_firewall_enable_ftp|bool else '0' }}
+enforce_outbound = {{ '1' if dome9_firewall_enforce_outbound|bool else '0' }}
+synflood_protect = {{ '1' if dome9_firewall_synflood_protect|bool else '0' }}
 
 [poller]
 ca_certs = {{ dome9_poller_ca_certs }}
-enabled = {{ '1' if dome9_poller_enabled is defined and dome9_poller_enabled else '0' }}
+enabled = {{ '1' if dome9_poller_enabled|bool else '0' }}
 host = {{ dome9_poller_host }}
-nossl = {{ '1' if dome9_poller_nossl is defined and dome9_poller_nossl else '0' }}
+nossl = {{ '1' if dome9_poller_nossl|bool else '0' }}
 port = {{ dome9_poller_port }}
