@@ -1,6 +1,7 @@
 ---
 dependencies: []
 galaxy_info:
+  role_name: dome9agent
   author: tkimball83
   description: RHEL/CentOS - Dome9 Cloud Infrastructure Security
   license: GPLv3
